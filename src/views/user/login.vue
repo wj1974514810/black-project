@@ -38,9 +38,9 @@
 </template>
 
 <script>
-import hm_button from "../../components/hm_button";
-import hm_input from "../../components/hm_input";
-
+import hm_button from "@/components/hm_button";
+import hm_input from "@/components/hm_input";
+import { userLogin } from "@/apis/user.js";
 export default {
   components: {
     hm_button,
@@ -59,7 +59,27 @@ export default {
     //   this.user.username = data;
     // },
     login(e) {
-      console.log(this.user);
+      if (
+        /^1[35789]\d{9}$|^admin$/.test(this.user.username) &&
+        /^.{3,16}$/.test(this.user.password)
+      ) {
+        userLogin(this.user)
+          .then((res) => {
+            console.log(res);
+            if (res.data.message == "登录成功") {
+            } else {
+              this.$toast.fail("登录失败");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        this.$toast({
+          message: "账户或密码错误!",
+          position: "top",
+        });
+      }
     },
   },
 };

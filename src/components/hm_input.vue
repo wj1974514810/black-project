@@ -15,6 +15,7 @@ export default {
       // 定义数据校验规则
       type: RegExp,
     },
+    // 错误信息
     msg: {
       type: String,
       default: "用户名或密码输入错误！",
@@ -30,6 +31,9 @@ export default {
     handlerinput(e) {
       this.pn = "class";
       let value = e.target.value;
+      if (value.length == "") {
+        this.pn = "pn";
+      }
       if (this.rules) {
         if (this.rules.test(value)) {
           this.flag = true;
@@ -39,11 +43,13 @@ export default {
       }
       this.$emit("input", value);
     },
+
+    // 失焦后
     handlerBlur(e) {
       let value = e.target.value;
       if (this.rules) {
         if (!this.rules.test(value)) {
-          console.log("输入错误！");
+          this.$toast.fail("用户名或密码错误！");
         }
       }
     },

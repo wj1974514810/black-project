@@ -4,6 +4,12 @@ import '@/styles/reset.less'
 
 import router from '@/router/index.js'
 
+// import Vant from 'vant';
+// import 'vant/lib/index.css';
+
+// Vue.use(Vant);
+import { Toast } from 'vant'
+Vue.use(Toast)
 
 Vue.config.productionTip = false
 
