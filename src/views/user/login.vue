@@ -18,11 +18,24 @@
         <div class="button">登录按钮</div>
       </div>
     </div>
+    <!-- 这里的click事件，是子组件所发出的click事件  子传父 -->
+    <hm_button @click="login" type="primary">登录</hm_button>
   </div>
 </template>
 
 <script>
-export default {};
+import hm_button from "../../components/hm_button";
+
+export default {
+  components: {
+    hm_button,
+  },
+  methods: {
+    login(e) {
+      console.log(1, e);
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
