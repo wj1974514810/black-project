@@ -9,3 +9,10 @@ export const userLogin = (data) => {
         data
     })
 }
+export const userRegister = (data) => {
+    return axios({
+        method: 'post',
+        url: '/register',
+        data
+    })
+}

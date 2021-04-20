@@ -75,8 +75,8 @@ export default {
             console.log(err);
           });
       } else {
-        this.$toast({
-          message: "账户或密码错误!",
+        this.$toast.fail({
+          message: res.data.message,
           position: "top",
         });
       }
