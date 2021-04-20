@@ -5,11 +5,25 @@
         <div class="close"><span class="iconfont iconicon-test"></span></div>
         <div class="logo"><span class="iconfont iconnew"></span></div>
         <div class="inputs">
-          <input placeholder="请输入手机号" class="input" /><input
-            placeholder="密码"
-            class="input"
-            type="password"
-          />
+          <!-- v-model：双向数据绑定：数据影响元素+元素影响数据 -->
+          <!-- 1、为子组件的value属性赋值
+           2、监听子组件所发出的input事件，必须是input 唯一
+       -->
+          <hm_input
+            v-model="user.username"
+            placeholder="请输入手机号"
+            :rules="/^1[35789]\d{9}$/"
+            msg="请输入11位手机号"
+          ></hm_input>
+          <!-- 
+            为子组件赋值优先赋值给子组件的props属性，如果没有props属性，那么就会添加到组件的根元素，所以用v-model比props好太多
+           -->
+          <hm_input
+            v-model="user.password"
+            placeholder="请输入密码"
+            :rules="/^.{3,16}$/"
+            msg="请输入3-16位的密码"
+          ></hm_input>
         </div>
         <p class="tips">
           没有账号？
@@ -25,14 +39,27 @@
 
 <script>
 import hm_button from "../../components/hm_button";
+import hm_input from "../../components/hm_input";
 
 export default {
   components: {
     hm_button,
+    hm_input,
+  },
+  data() {
+    return {
+      user: {
+        username: "",
+        password: "",
+      },
+    };
   },
   methods: {
+    // handler(data) {
+    //   this.user.username = data;
+    // },
     login(e) {
-      console.log(1, e);
+      console.log(this.user);
     },
   },
 };
