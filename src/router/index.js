@@ -16,6 +16,12 @@ const router = new Vuerouter({
             path: '/register',
             component: () => import('@/views/user/register.vue')
         }
+        ,
+        {
+            name: 'personal',
+            path: '/personal',
+            component: () => import('@/views/user/personal.vue')
+        }
     ]
 })
 

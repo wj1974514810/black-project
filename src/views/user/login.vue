@@ -29,7 +29,7 @@
           没有账号？
           <a href="#/register" class="">去注册</a>
         </p>
-        <div class="button">登录按钮</div>
+        <!-- <div class="button">登录按钮</div> -->
       </div>
     </div>
     <!-- 这里的click事件，是子组件所发出的click事件  子传父 -->
@@ -67,6 +67,7 @@ export default {
           .then((res) => {
             console.log(res);
             if (res.data.message == "登录成功") {
+              this.$router.push({ path: "/personal" });
             } else {
               this.$toast.fail("登录失败");
             }
