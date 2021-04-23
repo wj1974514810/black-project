@@ -33,24 +33,28 @@
     </van-dialog>
     <hmcell
       title="密码"
-      :desc="userinfo.password"
-      @click.native="showeditPassword"
+      desc="*****"
+      @click.native="
+        passwordshow = true;
+        oldpassword = newpassword = '';
+      "
     ></hmcell>
     <van-dialog
       v-model="passwordshow"
       title="修改密码"
+      :before-close="beforclose"
       show-cancel-button
       @confirm="editPassword"
     >
       <van-field
         required
-        v-model="oldpassword"
+        v-model.trim="oldpassword"
         label="原密码"
         placeholder="请输入原密码"
       />
       <van-field
         required
-        v-model="newpassword"
+        v-model.trim="newpassword"
         label="新密码"
         placeholder="请输入新密码"
       />
@@ -89,10 +93,7 @@ export default {
       nickname: "",
       oldpassword: "",
       newpassword: "",
-      actions: [
-        { name: "男", nid: 1 },
-        { name: "女", nid: 0 },
-      ],
+      actions: [{ name: "男" }, { name: "女" }],
     };
   },
   mounted() {
@@ -147,10 +148,6 @@ export default {
       this.nickname = this.userinfo.nickname;
     },
     // 修改密码模态框及原密码展示
-    showeditPassword() {
-      this.passwordshow = !this.passwordshow;
-      this.oldpassword = this.userinfo.password;
-    },
 
     // 修改昵称
     editNickname() {
@@ -169,44 +166,57 @@ export default {
         });
     },
     // 修改密码
-    editPassword() {
-      if (/^.{3,16}$/.test(this.password)) {
-        updateUserInfo(this.$route.params.id, {
-          password: this.newpassword,
-        })
-          .then((res) => {
-            console.log(res);
-            if (res.data.message == "修改成功") {
-              this.$toast.success(res.data.message);
-              this.userinfo.password = this.newpassword;
-            }
-          })
-          .catch((err) => {
-            console.log(err);
+    async editPassword() {
+      if (this.oldpassword == this.userinfo.password) {
+        if (
+          /^.{3,16}$/.test(this.newpassword) &&
+          this.oldpassword != this.newpassword
+        ) {
+          await updateUserInfo(this.$route.params.id, {
+            password: this.newpassword,
           });
+          this.$toast.success("修改密码成功");
+          this.userinfo.password = this.newpassword;
+        } else {
+          this.$toast.fail({
+            message: "请输入3-16位的新密码或新密码与原密码不能一样",
+            position: "top",
+          });
+        }
       } else {
         this.$toast.fail({
-          message: res.data.message,
+          message: "原密码输入错误",
           position: "top",
         });
+      }
+    },
+    // 阻止关闭密码弹窗
+    beforclose(action, done) {
+      //如果confirm(确实按钮触发时)
+      if (action == "confirm") {
+        if (
+          // 如果原密码不对 或新密码不规则
+          this.oldpassword !== this.userinfo.password ||
+          !/^.{3,16}$/.test(this.newpassword) ||
+          this.oldpassword == this.newpassword
+        ) {
+          // 阻止关闭弹窗
+          done(false);
+        } else {
+          // 关闭弹窗
+          done();
+        }
+      } else {
+        done();
       }
     },
     // 修改性别
     showeditGender(item) {
       this.gendershow = false;
-      updateUserInfo(this.$route.params.id, {
-        gender: item.nid,
-      })
-        .then((res) => {
-          console.log(res);
-          if (res.data.message == "修改成功") {
-            this.$toast.success("用户性别修改成功");
-            this.userinfo.gender = item.nid;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      let gender = item.name == "男" ? 1 : 0;
+      updateUserInfo(this.$route.params.id, { gender });
+      this.$toast.success("用户性别修改成功");
+      this.userinfo.gender = gender;
     },
   },
 };
