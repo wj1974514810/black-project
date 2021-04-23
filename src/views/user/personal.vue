@@ -1,14 +1,18 @@
 <template>
   <div class="personal">
-    <router-link to="/edit_profile">
+    <router-link :to="'/edit_profile/' + id">
       <div class="profile">
-        <img
-          src="http://img1.imgtn.bdimg.com/it/u=3757784226,1202878475&fm=26&gp=0.jpg"
-          alt
-        />
+        <img :src="userinfo.head_img" alt />
         <div class="profile-center">
           <div class="name">
-            <span class="iconfont iconxingbienan"></span>我就是我
+            <span
+              class="iconfont"
+              :class="{
+                iconxingbienan: userinfo.gender == 1,
+                iconxingbienv: userinfo.gender == 0,
+              }"
+            ></span
+            >{{ userinfo.nickname }}
           </div>
           <div class="time">2019-9-24</div>
         </div>
@@ -26,10 +30,34 @@
 <script>
 import hmcell from "@/components/hm_cell";
 import hm_button from "@/components/hm_button";
+import { userPersonal } from "@/apis/user.js";
+import axios from "../../utils/hm_axios";
 export default {
   components: {
     hmcell,
     hm_button,
+  },
+  data() {
+    return {
+      userinfo: {},
+      id: "",
+      axios,
+    };
+  },
+  mounted() {
+    this.id = this.$route.params.id;
+    userPersonal(this.id)
+      .then((res) => {
+        console.log(res);
+        if (res.data.message == "获取成功") {
+          this.userinfo = res.data.data;
+          this.userinfo.head_img =
+            axios.defaults.baseURL + this.userinfo.head_img;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 </script>

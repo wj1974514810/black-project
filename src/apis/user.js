@@ -16,3 +16,16 @@ export const userRegister = (data) => {
         data
     })
 }
+export const userPersonal = (id) => {
+    return axios({
+        url: `/user/${id}`,
+        // headers: { Authorization: localStorage.getItem('hmtt_token') }
+    })
+}
+export const updateUserInfo = (id, data) => {
+    return axios({
+        method: 'post',
+        url: `/user_update/${id}`,
+        data
+    })
+}
