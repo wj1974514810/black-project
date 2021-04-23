@@ -7,6 +7,16 @@ Vue.use(Vuerouter)
 const router = new Vuerouter({
     routes: [
         {
+            name: 'default',
+            path: '/',
+            redirect: { name: 'index' }
+        },
+        {
+            name: 'index',
+            path: '/index/:id',
+            component: () => import('@/views/index.vue')
+        },
+        {
             name: 'login',
             path: '/login',
             component: () => import('@/views/user/login.vue')
