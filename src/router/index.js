@@ -7,7 +7,6 @@ Vue.use(Vuerouter)
 const router = new Vuerouter({
     routes: [
         {
-            name: 'default',
             path: '/',
             redirect: { name: 'index' }
         },

@@ -38,39 +38,66 @@ export default {
     return {
       active: localStorage.getItem("hmtt_token") ? 1 : 0,
       cataList: [],
-      //   postlist: [],
+      // postlist: [],
     };
   },
   async mounted() {
     //   获取栏目数据
     let res = await getCateList();
     this.cataList = res.data.data;
+    console.log(this.cataList);
 
-    // 数据改造
+    // 不封装的数据该改造 步骤1
+    // this.cataList = this.cataList.map((v) => {
+    //   return { ...v, postlist: [] };
+    // });
+    // let id = this.cataList[this.active].id;
+    // this.postlist = (await getPostList(id)).data.data;
+    // console.log(this.postlist);
+    // console.log(id);
+
+    // console.log(this.cataList);
+
+    // 封装数据改造1
     // map函数，拿到每一个结果存起来
     this.cataList = this.cataList.map((v) => {
-      // ...v展开数据  加成员postlist
-      return { ...v, postlist: [] };
+      // ...v展开数据  数据里面加入成员postlist，pagesize，pageIndex
+      return { ...v, postlist: [], pagesize: 20, pageIndex: 2 };
     });
+    console.log(this.cataList);
     // 打开页面立即执行一次获取当前栏目的数据
     this.getpost();
   },
 
   //   监听
   watch: {
-    async active() {
-      //  如果数据里的数组里面的长度是0就发请求
+     active() {
+      // 不封装的数据该改造 步骤2
+      // if (this.cataList[this.active].postlist.length == 0) {
+      //   // this.getpost();
+      //   let id = this.cataList[this.active].id;
+      //   // this.postlist = (await getPostList(id)).data.data;
+      //   this.cataList[this.active].postlist = (await getPostList(id)).data.data;
+
+      //   //  如果数据里的数组里面的长度是0就发请求
+      // 封装数据改造2
       if (this.cataList[this.active].postlist.length == 0) {
         this.getpost();
       }
     },
   },
   methods: {
+    //
     async getpost() {
-      console.log(this.active);
+      // console.log(this.active);
       let id = this.cataList[this.active].id;
+      let pageSize = this.cataList[this.active].pagesize;
+      let pageIndex = this.cataList[this.active].pageIndex;
+      console.log(pageSize);
       //   把获取到的数据放在每一个栏目的数组里
-      this.cataList[this.active].postlist = (await getPostList(id)).data.data;
+      this.cataList[this.active].postlist = (
+        await getPostList(id, pageSize, pageIndex)
+      ).data.data;
     },
   },
 };
