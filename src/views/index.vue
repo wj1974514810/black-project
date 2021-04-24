@@ -28,11 +28,13 @@
           :immediate-check="false"
           @load="onLoad"
         >
-          <hm_postblock
-            v-for="post in value.postlist"
-            :key="post.id"
-            :article="post"
-          ></hm_postblock>
+          <van-pull-refresh v-model="value.isLoading" @refresh="onRefresh">
+            <hm_postblock
+              v-for="post in value.postlist"
+              :key="post.id"
+              :article="post"
+            ></hm_postblock>
+          </van-pull-refresh>
         </van-list>
       </van-tab>
     </van-tabs>
@@ -70,6 +72,7 @@ export default {
         pageIndex: 1,
         loading: false,
         finished: false,
+        isLoading: false,
       };
     });
     console.log(this.cataList);
@@ -88,6 +91,18 @@ export default {
     },
   },
   methods: {
+    // 下拉刷新
+    onRefresh() {
+      // 页面设为1
+      this.cataList[this.active].pageIndex = 1;
+      // 数据数组长度清0
+      this.cataList[this.active].postlist.length = 0;
+
+      // 4.将finished重置为false,以便可以继续的上拉加载
+      this.cataList[this.active].finished = false;
+      this.getpost();
+    },
+    // 上拉刷新
     onLoad() {
       // console.log(1);
       this.cataList[this.active].pageIndex++;
@@ -109,6 +124,8 @@ export default {
       this.cataList[this.active].postlist.push(...current);
       // 本次请求完成之后，将loading重置为false，以便下一次的下拉
       this.cataList[this.active].loading = false;
+      this.cataList[this.active].isLoading = false;
+
       // 如果下一次获取数据的长度小于pageSize的长度
       if (current < this.cataList[this.active].pageSize) {
         //finished 是否已加载完成，加载完成后不再触发load事件
