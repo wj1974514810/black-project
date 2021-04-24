@@ -75,7 +75,7 @@ export default {
         isLoading: false,
       };
     });
-    console.log(this.cataList);
+    // console.log(this.cataList);
     // 打开页面立即执行一次获取当前栏目的数据
     this.getpost();
   },
@@ -131,7 +131,7 @@ export default {
         //finished 是否已加载完成，加载完成后不再触发load事件
         this.cataList[this.active].finished = true;
       }
-      console.log(this.cataList[this.active].postlist);
+      // console.log(this.cataList[this.active].postlist);
     },
   },
 };

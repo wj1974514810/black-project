@@ -2,7 +2,7 @@
   <div
     class="single"
     v-if="article.type == 1 && article.cover.length < 3"
-    @click="$router.push({ path: `/articleDetail/${article.id}` })"
+    @click="$router.push({ path: `/postDetail/${article.id}` })"
   >
     <div class="left">
       <p class="content">{{ article.title }}</p>
@@ -17,7 +17,7 @@
   <div
     class="single2"
     v-else-if="article.type === 2"
-    @click="$router.push({ path: `/articleDetail/${article.id}` })"
+    @click="$router.push({ path: `/postDetail/${article.id}` })"
   >
     <p class="content">{{ article.title }}</p>
     <div class="playarea">
@@ -35,7 +35,7 @@
   <div
     class="single3"
     v-else-if="article.type === 1 && article.cover.length >= 3"
-    @click="$router.push({ path: `/articleDetail/${article.id}` })"
+    @click="$router.push({ path: `/postDetail/${article.id}` })"
   >
     <p class="content">{{ article.title }}</p>
     <div class="imgs">

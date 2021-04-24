@@ -19,7 +19,7 @@ axios.interceptors.request.use(function (config) {
 // 响应拦截器
 axios.interceptors.response.use(function (response) {
     // console.log(response);
-    if (response.data.message == "用户信息验证失败!") {
+    if (response.data.message == "用户信息验证失败!" || response.data.message == '用户信息验证失败') {
         Toast.fail('用户信息验证失败');
         window.location.href = '#/login'
     }
