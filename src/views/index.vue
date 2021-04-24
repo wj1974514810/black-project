@@ -18,11 +18,22 @@
     <!-- swipeable是可以进行左右滑动 -->
     <van-tabs v-model="active" sticky swipeable>
       <van-tab :title="value.name" v-for="value in cataList" :key="value.id">
-        <hm_postblock
-          v-for="post in value.postlist"
-          :key="post.id"
-          :article="post"
-        ></hm_postblock>
+        <!--immediate-check 是否在初始化时立即执行滚动位置检查 给false -->
+        <!--offset 滚动条与底部距离小于 offset 时触发load事件 -->
+        <van-list
+          v-model="value.loading"
+          :finished="value.finished"
+          finished-text="没有更多了"
+          offset="5"
+          :immediate-check="false"
+          @load="onLoad"
+        >
+          <hm_postblock
+            v-for="post in value.postlist"
+            :key="post.id"
+            :article="post"
+          ></hm_postblock>
+        </van-list>
       </van-tab>
     </van-tabs>
   </div>
@@ -38,6 +49,7 @@ export default {
     return {
       active: localStorage.getItem("hmtt_token") ? 1 : 0,
       cataList: [],
+
       // postlist: [],
     };
   },
@@ -45,24 +57,20 @@ export default {
     //   获取栏目数据
     let res = await getCateList();
     this.cataList = res.data.data;
-    console.log(this.cataList);
-
-    // 不封装的数据该改造 步骤1
-    // this.cataList = this.cataList.map((v) => {
-    //   return { ...v, postlist: [] };
-    // });
-    // let id = this.cataList[this.active].id;
-    // this.postlist = (await getPostList(id)).data.data;
-    // console.log(this.postlist);
-    // console.log(id);
-
     // console.log(this.cataList);
 
     // 封装数据改造1
     // map函数，拿到每一个结果存起来
     this.cataList = this.cataList.map((v) => {
       // ...v展开数据  数据里面加入成员postlist，pagesize，pageIndex
-      return { ...v, postlist: [], pagesize: 20, pageIndex: 2 };
+      return {
+        ...v,
+        postlist: [],
+        pageSize: 20,
+        pageIndex: 1,
+        loading: false,
+        finished: false,
+      };
     });
     console.log(this.cataList);
     // 打开页面立即执行一次获取当前栏目的数据
@@ -71,14 +79,7 @@ export default {
 
   //   监听
   watch: {
-     active() {
-      // 不封装的数据该改造 步骤2
-      // if (this.cataList[this.active].postlist.length == 0) {
-      //   // this.getpost();
-      //   let id = this.cataList[this.active].id;
-      //   // this.postlist = (await getPostList(id)).data.data;
-      //   this.cataList[this.active].postlist = (await getPostList(id)).data.data;
-
+    active() {
       //   //  如果数据里的数组里面的长度是0就发请求
       // 封装数据改造2
       if (this.cataList[this.active].postlist.length == 0) {
@@ -87,17 +88,33 @@ export default {
     },
   },
   methods: {
-    //
+    onLoad() {
+      // console.log(1);
+      this.cataList[this.active].pageIndex++;
+      this.getpost();
+      // setTimeout(() => {
+      // }, 2000);
+    },
     async getpost() {
       // console.log(this.active);
-      let id = this.cataList[this.active].id;
-      let pageSize = this.cataList[this.active].pagesize;
-      let pageIndex = this.cataList[this.active].pageIndex;
-      console.log(pageSize);
       //   把获取到的数据放在每一个栏目的数组里
-      this.cataList[this.active].postlist = (
-        await getPostList(id, pageSize, pageIndex)
+      let current = (
+        await getPostList({
+          category: this.cataList[this.active].id,
+          pageSize: this.cataList[this.active].pageSize,
+          pageIndex: this.cataList[this.active].pageIndex,
+        })
       ).data.data;
+      // 打散这个数组push 到postlist数组里，以便加载是衔接，而不是覆盖
+      this.cataList[this.active].postlist.push(...current);
+      // 本次请求完成之后，将loading重置为false，以便下一次的下拉
+      this.cataList[this.active].loading = false;
+      // 如果下一次获取数据的长度小于pageSize的长度
+      if (current < this.cataList[this.active].pageSize) {
+        //finished 是否已加载完成，加载完成后不再触发load事件
+        this.cataList[this.active].finished = true;
+      }
+      console.log(this.cataList[this.active].postlist);
     },
   },
 };
