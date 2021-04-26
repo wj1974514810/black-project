@@ -19,9 +19,17 @@
         <span class="iconfont iconjiantou1"></span>
       </div>
     </router-link>
+    <hmcell
+      title="我的关注"
+      desc="关注的用户"
+      @click.native="$router.push({ path: '/myfollow' })"
+    ></hmcell>
     <hmcell title="我的关注" desc="关注的用户"></hmcell>
-    <hmcell title="我的关注" desc="关注的用户"></hmcell>
-    <hmcell title="我的关注" desc="关注的用户"></hmcell>
+    <hmcell
+      title="我的收藏"
+      desc="收藏的文章"
+      @click.native="$router.push({ path: '/mystars' })"
+    ></hmcell>
     <hmcell title="我的关注" desc="关注的用户"></hmcell>
     <hm_button type="danger" style="margin-top: 20px">退出</hm_button>
   </div>

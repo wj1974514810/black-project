@@ -8,7 +8,7 @@ import router from '@/router/index.js'
 // import 'vant/lib/index.css';
 
 // Vue.use(Vant);
-import { Toast, Icon, Uploader, Dialog, Field, ActionSheet, Tab, Tabs, List, PullRefresh } from 'vant'
+import { Toast, Icon, Uploader, Dialog, Field, ActionSheet, Tab, Tabs, List, PullRefresh, SwipeCell, Button } from 'vant'
 Vue.use(Toast)
   .use(Icon)
   .use(Uploader)
@@ -19,6 +19,8 @@ Vue.use(Toast)
   .use(Tabs)
   .use(List)
   .use(PullRefresh)
+  .use(SwipeCell)
+  .use(Button)
 
 Vue.config.productionTip = false
 

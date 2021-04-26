@@ -25,3 +25,10 @@ export const starArticle = (id) => {
         url: `/post_star/${id}`
     })
 }
+
+// 获取评论数据
+export const getCommentList = (id) => {
+    return axios({
+        url: `/post_comment/${id}`,
+    })
+}

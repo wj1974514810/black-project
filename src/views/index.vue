@@ -9,7 +9,7 @@
         <van-icon name="search" />
         <span>搜索商品</span>
       </div>
-      <div class="user" @click="$router.push({ path: `/personal/${id}` })">
+      <div class="user" @click="jump">
         <van-icon name="manager-o" />
       </div>
     </div>
@@ -55,6 +55,7 @@ export default {
       // postlist: [],
     };
   },
+
   async mounted() {
     //   获取栏目数据
     let res = await getCateList();
@@ -91,6 +92,17 @@ export default {
     },
   },
   methods: {
+    // 首页跳转个人中心
+    jump() {
+      // 拿到存储在本地的id
+      let id = localStorage.getItem("id");
+      if (id) {
+        this.$router.push({ path: `/personal/${id}` });
+      } else {
+        this.$toast.fail("未登录，请先登录");
+        this.$router.push({ path: "/login" });
+      }
+    },
     // 下拉刷新
     onRefresh() {
       // 页面设为1

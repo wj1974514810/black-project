@@ -68,8 +68,17 @@ export default {
             console.log(res);
             if (res.data.message == "登录成功") {
               localStorage.setItem("hmtt_token", res.data.data.token);
-              // 跳转到个人中心页面且携带id
-              this.$router.push({ path: `/personal/${res.data.data.user.id}` });
+              localStorage.setItem("id", res.data.data.user.id);
+              // 如果有redirect 就带redirect 跳到刚刚的页面
+              let redirect = location.href.split("=")[1];
+              if (redirect) {
+                location.href = decodeURIComponent(redirect);
+              } else {
+                // 跳转到个人中心页面且携带id
+                this.$router.push({
+                  path: `/personal/${res.data.data.user.id}`,
+                });
+              }
             } else {
               this.$toast.fail("登录失败");
             }

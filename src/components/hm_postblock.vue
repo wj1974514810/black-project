@@ -59,20 +59,19 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      // 如果cover里的长度大于2 那就是三张图片  有http或者https不拼接地址，没有就拼接地址
+      // 由于服务器数据的原因，有些图片的路径是全路径，有些是目录+文件名称，所以需要根据路径的组成部分进行处理
       if (this.article.cover.length > 2) {
         for (let i = 0; i < this.article.cover.length; i++) {
           this.article.cover[i].url =
-            this.article.cover[i].url.indexOf("http") !== -1 ||
-            this.article.cover[i].url.indexOf("https") !== -1
+            this.article.cover[i].url.indexOf("http") != -1 ||
+            this.article.cover[i].url.indexOf("https") != -1
               ? this.article.cover[i].url
               : axios.defaults.baseURL + this.article.cover[i].url;
         }
       } else {
-        // 如果cover里的长度小于2 那就是一张图片  有http或者https不拼接地址，没有就拼接地址
         this.article.cover[0].url =
-          this.article.cover[0].url.indexOf("http") !== -1 ||
-          this.article.cover[0].url.indexOf("https") !== -1
+          this.article.cover[0].url.indexOf("http") != -1 ||
+          this.article.cover[0].url.indexOf("https") != -1
             ? this.article.cover[0].url
             : axios.defaults.baseURL + this.article.cover[0].url;
       }

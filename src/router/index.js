@@ -43,6 +43,24 @@ const router = new Vuerouter({
             path: '/postDetail/:id',
             component: () => import('@/views/post/postDetail.vue')
         }
+        ,
+        {
+            name: 'myfollow',
+            path: '/myfollow',
+            component: () => import('@/views/user/myfollow.vue')
+        }
+        ,
+        {
+            name: 'mystars',
+            path: '/mystars',
+            component: () => import('@/views/user/mystars.vue')
+        }
+        ,
+        {
+            name: 'comment',
+            path: '/comment/:id',
+            component: () => import('@/views/comment.vue')
+        }
     ]
 })
 
