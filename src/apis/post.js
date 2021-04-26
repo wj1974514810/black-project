@@ -12,12 +12,14 @@ export const getPostDetail = (id) => {
 
     })
 }
+// 点赞
 export const likePost = (id) => {
     return axios({
         url: `/post_like/${id}`,
 
     })
 }
+// 收藏
 export const starArticle = (id) => {
     return axios({
         url: `/post_star/${id}`

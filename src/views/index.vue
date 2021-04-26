@@ -75,7 +75,7 @@ export default {
         isLoading: false,
       };
     });
-    // console.log(this.cataList);
+    console.log(this.cataList);
     // 打开页面立即执行一次获取当前栏目的数据
     this.getpost();
   },

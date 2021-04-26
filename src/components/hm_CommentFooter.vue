@@ -38,6 +38,7 @@ export default {
     };
   },
   methods: {
+    // 收藏与取消收藏
     async scclick() {
       let id = this.post.id;
       let res = await starArticle(id);
