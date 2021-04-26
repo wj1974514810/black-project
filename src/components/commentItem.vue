@@ -1,5 +1,8 @@
 <template>
   <div class="commentItem">
+    <!-- 开始递归来实现 嵌套评论  v-fi判断有没有parent，有就嵌套，没有就不做 -->
+    <com v-if="comment.parent" :comment="comment.parent"></com>
+    <!-- 第二层 -->
     <div class="top">
       <div class="left">
         <span>{{ comment.user.nickname }}</span> &nbsp;&nbsp;&nbsp;
@@ -13,6 +16,8 @@
 
 <script>
 export default {
+  // 注册一个组件 name属性
+  name: "com",
   props: {
     comment: {
       type: Object,

@@ -5,44 +5,65 @@
         <van-icon name="arrow-left" @click="$router.go(-1)" />
       </template>
     </hm_header>
-    <div class="item" v-for="value in commentList" :key="value.id">
-      <div class="head">
-        <img :src="axios.defaults.baseURL + value.user.head_img" alt />
-        <div>
-          <p>{{ value.user.nickname }}</p>
-          <span>时间</span>
+    <div class="list">
+      <div class="item" v-for="value in commentList" :key="value.id">
+        <div class="head">
+          <img :src="axios.defaults.baseURL + value.user.head_img" alt />
+          <div>
+            <p>{{ value.user.nickname }}</p>
+            <span>时间</span>
+          </div>
+          <span>回复</span>
         </div>
-        <span>回复</span>
+        <commentItem v-if="value.parent" :comment="value.parent"></commentItem>
+        <div class="text">{{ value.content }}</div>
       </div>
-      <commentItem v-if="value.parent" :comment="value.parent"></commentItem>
-      <div class="text">{{ value.content }}</div>
     </div>
+    <hm_commentFooter :post="articl" @refresh="refresh"></hm_commentFooter>
   </div>
 </template>
 
 <script>
 import hm_header from "@/components/hm_header.vue";
 import commentItem from "@/components/commentItem.vue";
-import { getCommentList } from "@/apis/post.js";
+import hm_commentFooter from "@/components/hm_CommentFooter";
+import { getCommentList, getPostDetail } from "@/apis/post.js";
 import axios from "@/utils/hm_axios.js";
 export default {
-  components: { hm_header, commentItem },
+  components: { hm_header, commentItem, hm_commentFooter },
   data() {
     return {
       commentList: [],
       axios,
+      articl: {},
     };
   },
   async mounted() {
-    let id = this.$route.params.id;
-    let res = await getCommentList(id);
-    this.commentList = res.data.data;
-    console.log(this.commentList);
+    this.init();
+  },
+  methods: {
+    async init() {
+      let id = this.$route.params.id;
+      //   获取文章的详情数据
+      this.articl = (await getPostDetail(id)).data.data;
+      //   获取文章评论数据
+      let res = await getCommentList(id);
+      this.commentList = res.data.data;
+      console.log(this.commentList);
+    },
+    refresh() {
+      this.init();
+      //   让列表自动的滚到底部
+      window.scrollTo(0, 0);
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
+.list {
+  padding-bottom: 60px;
+}
 .item {
   padding: 10px 0;
   border-bottom: 1px solid #ccc;

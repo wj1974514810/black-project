@@ -17,9 +17,9 @@
       <i class="iconfont iconfenxiang"></i>
     </div>
     <div class="inputcomment" v-show="isFocus">
-      <textarea ref="commtext" rows="5" @blur="isFocus = false"></textarea>
+      <textarea ref="commtext" rows="5" v-model.trim="content"></textarea>
       <div>
-        <span>发 送</span>
+        <span @click="sendComment">发 送</span>
         <span @click="isFocus = !isFocus">取 消</span>
       </div>
     </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { starArticle } from "@/apis/post.js";
+import { starArticle, publishComment } from "@/apis/post.js";
 export default {
   props: {
     post: {
@@ -38,6 +38,8 @@ export default {
   data() {
     return {
       isFocus: false,
+      // 输入框内容
+      content: "",
     };
   },
   methods: {
@@ -45,9 +47,31 @@ export default {
     async scclick() {
       let id = this.post.id;
       let res = await starArticle(id);
-      this.post.has_star = !this.post.has_star;
       this.$toast.success(res.data.message);
+      this.post.has_star = !this.post.has_star;
       console.log(res);
+    },
+    // 发表评论
+    async sendComment() {
+      if (this.content.length == 0) {
+        this.$toast.fail("请输入评论内容");
+        return;
+      }
+      //一个data对象
+      let data = {
+        content: this.content,
+      };
+      // 调用api  传值  id和data对象
+      let res = await publishComment(this.post.id, data);
+      console.log(res);
+      // 成功的提示
+      this.$toast.success("发表评论成功");
+      // 隐藏输入框
+      this.isFocus = false;
+      // 清空内容
+      this.content = "";
+      // 子传父
+      this.$emit("refresh");
     },
   },
 };

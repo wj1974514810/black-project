@@ -32,3 +32,12 @@ export const getCommentList = (id) => {
         url: `/post_comment/${id}`,
     })
 }
+
+// 发表+回复评论
+export const publishComment = (id, data) => {
+    return axios({
+        method: 'post',
+        url: `/post_comment/${id}`,
+        data
+    })
+}
