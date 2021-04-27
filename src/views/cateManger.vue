@@ -44,9 +44,9 @@ export default {
     };
   },
   async mounted() {
-    this.cateList = JSON.parse(localStorage.getItem("cateList") || "[]");
+    this.cateList = JSON.parse(localStorage.getItem("cateList"));
     // 判断本地存储里有没有栏目，没有就发请求
-    if (this.cateList.length == 0) {
+    if (!this.cateList) {
       let res = await getCateList();
       console.log(res);
       this.cateList = res.data.data;
