@@ -31,7 +31,9 @@
       @click.native="$router.push({ path: '/mystars' })"
     ></hmcell>
     <hmcell title="我的关注" desc="关注的用户"></hmcell>
-    <hm_button type="danger" style="margin-top: 20px">退出</hm_button>
+    <hm_button type="danger" style="margin-top: 20px" @click="quit"
+      >退出</hm_button
+    >
   </div>
 </template>
 
@@ -66,6 +68,13 @@ export default {
       .catch((err) => {
         console.log(err);
       });
+  },
+  methods: {
+    quit() {
+      this.$router.push({ name: "index" });
+      localStorage.removeItem("hmtt_token");
+      localStorage.removeItem("id");
+    },
   },
 };
 </script>
