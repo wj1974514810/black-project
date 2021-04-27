@@ -43,3 +43,9 @@ export const publishComment = (id, data) => {
         data
     })
 }
+
+export const searchArticle = (keyword) => {
+    return axios({
+        url: `/post_search?keyword=` + keyword,
+    })
+}

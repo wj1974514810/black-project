@@ -67,6 +67,12 @@ const router = new Vuerouter({
             path: '/cateManger',
             component: () => import('@/views/cateManger.vue')
         }
+        ,
+        {
+            name: 'search',
+            path: '/search',
+            component: () => import('@/views/search.vue')
+        }
     ]
 })
 
