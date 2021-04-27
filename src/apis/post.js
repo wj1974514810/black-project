@@ -28,9 +28,10 @@ export const starArticle = (id) => {
 }
 
 // 获取评论数据
-export const getCommentList = (id) => {
+export const getCommentList = (id, params) => {
     return axios({
         url: `/post_comment/${id}`,
+        params
     })
 }
 

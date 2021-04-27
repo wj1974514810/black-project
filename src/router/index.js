@@ -61,14 +61,22 @@ const router = new Vuerouter({
             path: '/comment/:id',
             component: () => import('@/views/comment.vue')
         }
+        ,
+        {
+            name: 'cateManger',
+            path: '/cateManger',
+            component: () => import('@/views/cateManger.vue')
+        }
     ]
 })
 
 
-// 导航路由
+// 导航守卫
 import { Toast } from "vant"
 router.beforeEach((to, from, next) => {
-    if (to.path.indexOf('/personal/') !== -1) {
+    console.log('from', from);
+    let arr = ['personal', 'edit_profile', 'cateManger']
+    if (arr.indexOf(to.name) !== -1) {
         // 拿到登陆的token
         let token = localStorage.getItem("hmtt_token");
         if (token) {

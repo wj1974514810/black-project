@@ -62,7 +62,7 @@ export default {
       //   获取文章的详情数据
       this.articl = (await getPostDetail(id)).data.data;
       //   获取文章评论数据
-      let res = await getCommentList(id);
+      let res = await getCommentList(id, { pageSize: 100 });
       this.commentList = res.data.data;
       console.log(this.commentList);
     },

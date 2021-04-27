@@ -57,9 +57,33 @@ export default {
   },
 
   async mounted() {
+    // 用原生的代码  事件的委托  单击+号(伪元素)  进行页面的跳转
+    document.querySelector(".van-sticky").onclick = (e) => {
+      console.log(e.target.className);
+      if (e.target.className == "van-sticky") {
+        this.$router.push({ path: "/cateManger" });
+      }
+    };
+
     //   获取栏目数据
-    let res = await getCateList();
-    this.cataList = res.data.data;
+    this.cataList = JSON.parse(localStorage.getItem("cateList") || "[]");
+    // 如果本地存储里面没有栏目数据就发起请求
+    if (this.cataList.length == 0) {
+      let res = await getCateList();
+      this.cataList = res.data.data;
+    } else {
+      // 判断有没有登录
+      if (localStorage.getItem("hmtt_token")) {
+        // 有登录手动添加关注和头条两个栏目
+        this.cataList.unshift(
+          { id: 0, name: "关注", is_top: 1 },
+          { id: 999, name: "头条", is_top: 1 }
+        );
+      } else {
+        // 没有登录手动添加头条一个栏目
+        this.cataList.unshift({ id: 999, name: "头条", is_top: 1 });
+      }
+    }
     // console.log(this.cataList);
 
     // 封装数据改造1
@@ -150,6 +174,20 @@ export default {
 </script>
 
 <style lang="less" scoped>
+/deep/.van-sticky {
+  padding-right: 60px;
+  &::before {
+    content: "+";
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    right: 0;
+    top: 0;
+    text-align: center;
+    line-height: 38px;
+    font-size: 30px;
+  }
+}
 .index {
   .header {
     height: 60px;
