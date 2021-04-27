@@ -20,7 +20,7 @@
       <textarea ref="commtext" rows="5" v-model.trim="content"></textarea>
       <div>
         <span @click="sendComment">发 送</span>
-        <span @click="isFocus = !isFocus">取 消</span>
+        <span @click="cancle">取 消</span>
       </div>
     </div>
   </div>
@@ -33,6 +33,19 @@ export default {
     post: {
       type: Object,
       required: true,
+    },
+    commentObj: {
+      type: Object,
+      default: null,
+    },
+  },
+  // 监听有没有单击回复
+  watch: {
+    commentObj() {
+      // 如果有回复对象 就打开回复框
+      if (this.commentObj) {
+        this.isFocus = true;
+      }
     },
   },
   data() {
@@ -57,10 +70,14 @@ export default {
         this.$toast.fail("请输入评论内容");
         return;
       }
-      //一个data对象
+      //准备参数
       let data = {
         content: this.content,
       };
+      // 判断有没有this.commentObj
+      if (this.commentObj) {
+        data.parent_id = this.commentObj.id;
+      }
       // 调用api  传值  id和data对象
       let res = await publishComment(this.post.id, data);
       console.log(res);
@@ -72,6 +89,11 @@ export default {
       this.content = "";
       // 子传父
       this.$emit("refresh");
+    },
+    // 子传父
+    cancle() {
+      this.isFocus = false;
+      this.$emit("cancel");
     },
   },
 };

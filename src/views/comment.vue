@@ -13,13 +13,27 @@
             <p>{{ value.user.nickname }}</p>
             <span>时间</span>
           </div>
-          <span>回复</span>
+          <span @click="sendComment(value)">回复</span>
         </div>
-        <commentItem v-if="value.parent" :comment="value.parent"></commentItem>
+        <!--replay 是commentitem的 子传父  
+          让它=sendComment  这样就完成了  
+          commentitem 传给comment 
+          comment 再传给  hm_commentFooter  兄弟之间的传递
+           -->
+        <commentItem
+          v-if="value.parent"
+          :comment="value.parent"
+          @replay="sendComment"
+        ></commentItem>
         <div class="text">{{ value.content }}</div>
       </div>
     </div>
-    <hm_commentFooter :post="articl" @refresh="refresh"></hm_commentFooter>
+    <hm_commentFooter
+      :post="articl"
+      @refresh="refresh"
+      :commentObj="temp"
+      @cancel="temp = null"
+    ></hm_commentFooter>
   </div>
 </template>
 
@@ -36,6 +50,7 @@ export default {
       commentList: [],
       axios,
       articl: {},
+      temp: {},
     };
   },
   async mounted() {
@@ -52,9 +67,13 @@ export default {
       console.log(this.commentList);
     },
     refresh() {
+      // 刷新评论列表
       this.init();
-      //   让列表自动的滚到底部
+      //   让列表自动的滚到顶部
       window.scrollTo(0, 0);
+    },
+    sendComment(v) {
+      this.temp = v;
     },
   },
 };

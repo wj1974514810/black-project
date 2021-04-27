@@ -6,6 +6,7 @@ export const getPostList = (params) => {
         params
     })
 }
+// 文章详情
 export const getPostDetail = (id) => {
     return axios({
         url: `/post/${id}`,
