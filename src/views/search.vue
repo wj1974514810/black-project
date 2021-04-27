@@ -6,6 +6,7 @@
         v-model="userKey"
         placeholder="请输入搜索关键词"
         shape="round"
+        clearable
       >
       </van-search>
       <div @click="onSearch">搜索</div>
@@ -15,6 +16,7 @@
       <p v-for="value in historyList" :key="value.id" @click="histJump(value)">
         {{ value }}
       </p>
+      <p class="remove" @click="removeHistory">清空历史记录</p>
     </div>
     <div class="historyList">
       <h2>搜索结果</h2>
@@ -57,6 +59,10 @@ export default {
       this.userKey = value;
       this.onSearch();
     },
+    removeHistory() {
+      localStorage.removeItem("toutiao_search");
+      this.$router.go(0);
+    },
   },
   mounted() {
     //  页面加载完成就显示历史记录
@@ -81,6 +87,11 @@ export default {
 .historyList {
   padding: 10px;
   border-bottom: 1px solid #ccc;
+  .remove {
+    margin-top: 10px;
+    font-size: 15px;
+    color: red;
+  }
   h2 {
     line-height: 40px;
     font-weight: bold;
