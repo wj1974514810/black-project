@@ -74,6 +74,7 @@ const router = new Vuerouter({
 // 导航守卫
 import { Toast } from "vant"
 router.beforeEach((to, from, next) => {
+    console.log('frompath', from.fullPath);
     console.log('from', from);
     let arr = ['personal', 'edit_profile', 'cateManger']
     if (arr.indexOf(to.name) !== -1) {
@@ -85,6 +86,7 @@ router.beforeEach((to, from, next) => {
             // 没登陆跳转到登陆页面
             Toast("请登陆");
             next({ name: 'login' })
+            localStorage.setItem('dhsw', from.fullPath)
         }
     } else {
         next()

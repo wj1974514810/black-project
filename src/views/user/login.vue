@@ -71,8 +71,11 @@ export default {
               localStorage.setItem("id", res.data.data.user.id);
               // 如果有redirect 就带redirect 跳到刚刚的页面
               let redirect = location.href.split("=")[1];
+              let dhsw = localStorage.getItem("dhsw");
               if (redirect) {
                 location.href = decodeURIComponent(redirect);
+              } else if (dhsw) {
+                location.href = decodeURIComponent(dhsw);
               } else {
                 // 跳转到个人中心页面且携带id
                 this.$router.push({
