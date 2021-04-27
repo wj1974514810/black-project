@@ -60,7 +60,7 @@ export default {
     // 用原生的代码  事件的委托  单击+号(伪元素)  进行页面的跳转
     document.querySelector(".van-sticky").onclick = (e) => {
       console.log(e.target.className);
-      if (e.target.className == "van-sticky") {
+      if (e.target.className.indexOf(".van-sticky")) {
         this.$router.push({ path: "/cateManger" });
       }
     };
