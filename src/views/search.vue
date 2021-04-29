@@ -6,7 +6,6 @@
         v-model="userKey"
         placeholder="请输入搜索关键词"
         shape="round"
-        clearable
       >
       </van-search>
       <div @click="onSearch">搜索</div>
